@@ -1,0 +1,6 @@
+github = "leave-space-for-pat-here"
+
+[tools]
+darklua = "seaofvoices/darklua@0.12.0"
+rojo = "rojo-rbx/rojo@7.4.0-rc3"
+stylua = "johnnymorganz/stylua@0.19.1"

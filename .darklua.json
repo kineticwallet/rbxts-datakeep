@@ -1,0 +1,17 @@
+{
+	"generator": "retain_lines",
+	"rules": [
+		"compute_expression",
+		"filter_after_early_return",
+		"remove_comments",
+		"remove_empty_do",
+		"remove_nil_declaration",
+		"remove_unused_if_branch",
+		"remove_unused_while",
+		{
+			"rule": "rename_variables",
+			"globals": ["$default", "$roblox"],
+			"include_functions": true
+		}
+	]
+}
