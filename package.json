@@ -1,11 +1,14 @@
 {
-	"name": "@rbxts/rbxts-package-template",
-	"version": "1.0.0",
+	"name": "@rbxts/datakeep",
+	"version": "1.2.2",
 	"description": "",
 	"main": "out/init.lua",
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
+	"keywords": ["Promise", "DataStoreService", "DataKeep", "ProfileService", "Lapis"],
+	"author": "kineticwallet",
+	"contributors": [
+		"noahrepbulic"
+	],
+	"license": "MIT",
 	"types": "out/index.d.ts",
 	"files": [
 		"out",
@@ -14,11 +17,20 @@
 	"publishConfig": {
 		"access": "public"
 	},
+	"readme": "README.md",
+	"bugs": {
+		"url": "https://github.com/kineticwallet/rbxts-datakeep/issues"
+	},
+	"homepage": "https://github.com/kineticwallet/rbxts-datakeep",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kineticwallet/rbxts-datakeep"
+	},
 	"devDependencies": {
 		"@rbxts/compiler-types": "2.2.0-types.0",
 		"@rbxts/types": "^1.0.732",
-		"@typescript-eslint/eslint-plugin": "^6.12.0",
-		"@typescript-eslint/parser": "^6.12.0",
+		"@typescript-eslint/eslint-plugin": "^6.13.0",
+		"@typescript-eslint/parser": "^6.13.0",
 		"eslint": "^8.54.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^5.0.1",
@@ -30,5 +42,9 @@
 		"prettier-plugin-toml": "^1.0.0",
 		"roblox-ts": "^2.2.0",
 		"typescript": "~5.2.2"
+	},
+	"dependencies": {
+		"@rbxts/fastsignal": "10.2.1-ts.1",
+		"@rbxts/promise-forward": "^1.0.5"
 	}
 }
