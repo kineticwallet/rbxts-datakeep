@@ -1,6 +1,8 @@
-declare interface Wrapper {
-    onDataChange(self: unknown, dataPath: string, callback: Callback): RBXScriptConnection | undefined
-    Mutate(self: unknown, dataPath: string, processor: Callback): void
+import Keep from "./Keep";
+
+declare interface Wrapper<D> {
+	onDataChange(self: Keep<D>, dataPath: string, callback: Callback): RBXScriptConnection | undefined;
+	Mutate(self: Keep<D>, dataPath: string, processor: Callback): void;
 }
 
-export declare const Wrapper: Wrapper
+export declare const Wrapper: Wrapper<unknown>;
