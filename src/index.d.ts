@@ -44,9 +44,10 @@ declare type Store<D> = {
 	PostGlobalUpdate: (key: string, updateHandler: (globalUpdates: GlobalUpdates) => unknown) => Promise<void>;
 };
 
-declare interface DataKeep<D extends object>  {
-	Wrapper: Wrapper<D>;
-	GetStore(storeInfo: StoreInfo | string, dataTemplate: D): Promise<Store<D>>;
+declare interface DataKeep {
+	GetStore<D extends object>(storeInfo: StoreInfo | string, dataTemplate: D): Promise<Store<D>>;
 }
+
+declare const DataKeep: DataKeep;
 
 export = DataKeep;
