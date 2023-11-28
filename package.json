@@ -3,7 +3,13 @@
 	"version": "1.2.2",
 	"description": "",
 	"main": "out/init.lua",
-	"keywords": ["Promise", "DataStoreService", "DataKeep", "ProfileService", "Lapis"],
+	"keywords": [
+		"Promise",
+		"DataStoreService",
+		"DataKeep",
+		"ProfileService",
+		"Lapis"
+	],
 	"author": "kineticwallet",
 	"contributors": [
 		"noahrepbulic"

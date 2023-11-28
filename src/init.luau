@@ -20,6 +20,7 @@ local Promise = TS.import(
 )
 local Signal =
 	TS.import(script, game:GetService("ReplicatedStorage"), "include", "node_modules", "@rbxts", "fastsignal", "out")
+
 local MockStore = require(script.MockStore)
 
 local Keep = require(script.Keep)
@@ -117,7 +118,6 @@ export type Store = typeof(Store) & {
 	_keeps: { [string]: Keep.Keep },
 
 	Wrapper: { [string]: (...any) -> any },
-	Transformer: {}, -- Metatable: _processors, :RegisterProcessor -> () -> nil (destructor function)
 }
 
 export type GlobalUpdates = typeof(setmetatable({}, GlobalUpdates))
@@ -161,6 +161,20 @@ local function len(tbl: { [any]: any })
 	return count
 end
 
+local function DeepCopy(tbl: { [any]: any })
+	local copy = {}
+
+	for key, value in pairs(tbl) do
+		if type(value) == "table" then
+			copy[key] = DeepCopy(value)
+		else
+			copy[key] = value
+		end
+	end
+
+	return copy
+end
+
 local function canLoad(keep: Keep.KeepStruct)
 	-- return not keep.MetaData
 	-- 	or not keep.MetaData.ActiveSession -- no active session, so we can load (most likely a new Keep)
@@ -196,6 +210,7 @@ local function createMockStore(storeInfo: StoreInfo, dataTemplate) -- complete m
 		_mock = true,
 
 		_keeps = {},
+		_cachedKeepPromises = {},
 	}, Store)
 end
 
@@ -210,8 +225,6 @@ local function releaseKeepInternally(keep: Keep.Keep)
 end
 
 local function saveKeep(keep: Keep.Keep, release: boolean): Promise
-	print("auto saving")
-
 	if keep._released then
 		releaseKeepInternally(keep)
 		return Promise.resolve()
@@ -337,6 +350,14 @@ function Store.GetStore(storeInfo: StoreInfo | string, dataTemplate): Promise
 		_mock = if Store.mockStore then true else false, -- studio only/datastores not available
 
 		_cachedKeepPromises = {},
+
+		_compression = function(...)
+			return ...
+		end,
+
+		_decompression = function(...)
+			return ...
+		end,
 	}, Store)
 
 	Store._storeQueue[identifier] = self._store
@@ -455,6 +476,10 @@ function Store:LoadKeep(key: string, unReleasedHandler: UnReleasedHandler): Prom
 			end
 		end
 
+		if keep.Data and len(keep.Data) > 0 then
+			keep.Data = self._decompression(DeepCopy(keep.Data))
+		end
+
 		local keepClass = Keep.new(keep, self._data_template) -- why does typing break here? no idea.
 
 		keepClass._store = store -- mock store or real store
@@ -520,7 +545,11 @@ function Store:ViewKeep(key: string, version: string?): Promise
 		)
 
 		if Keeps[id] then -- TODO: check if got rejected before returning cache
-			return Promise.resolve(Keeps[id])
+			if Keeps[id]._released then
+				Keeps[id] = nil
+			else
+				return resolve(Keeps[id])
+			end
 		elseif
 			self._cachedKeepPromises[id]
 			and self._cachedKeepPromises[id].Status ~= Promise.Status.Rejected
@@ -531,6 +560,10 @@ function Store:ViewKeep(key: string, version: string?): Promise
 
 		local data = self._store:GetAsync(key, version) or {}
 
+		if len(data.Data) > 0 then
+			data.Data = self._decompression(DeepCopy(data.Data))
+		end
+
 		local keepObject = Keep.new(data, self._data_template)
 
 		self._cachedKeepPromises[id] = nil
@@ -540,6 +573,50 @@ function Store:ViewKeep(key: string, version: string?): Promise
 
 		return resolve(keepObject)
 	end)
+end
+
+--[=[
+	@method AttachToSave
+	@within Store
+
+	@param compression ({ any: any }) -> any
+	@param decompression ({ any: any }) -> any
+
+	@return void
+
+	Attaches compression and decompression 'plugin' functions to the store
+
+	:::caution
+	Functions **must** return a new data table. Do not compress the entire table into a JSON string. Failure to do so will result in data loss.
+	:::caution
+
+	```lua
+	keepStore:AttachToSave(function(data)
+		local newData = {}
+
+		for key, value in data do
+			newData[key] = HttpService:JSONEncode(value)
+		end
+
+		return newData
+	end, function(data)
+		local newData = {}
+
+		for key, value in data do
+			newData[key] = HttpService:JSONDecode(value)
+		end
+
+		return newData
+	end)
+	```
+]=]
+
+function Store:AttachToSave(compression: ({ any: any }) -> any, decompression: ({ any: any }) -> any)
+	assert(compression and type(compression) == "function", "Compression must be a function")
+	assert(decompression and type(decompression) == "function", "Decompression must be a function")
+
+	self._compression = compression
+	self._decompression = decompression
 end
 
 --[=[
