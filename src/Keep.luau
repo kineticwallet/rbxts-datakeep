@@ -20,16 +20,16 @@ Keep.__index = Keep
 
 local TS = _G[script]
 local Promise = TS.import(
-	script,
-	game:GetService("ReplicatedStorage"),
-	"include",
-	"node_modules",
-	"@rbxts",
-	"promise-forward",
-	"src"
+    script,
+    game:GetService("ReplicatedStorage"),
+    "include",
+    "node_modules",
+    "@rbxts",
+    "promise-forward",
+    "src"
 )
 local Signal =
-	TS.import(script, game:GetService("ReplicatedStorage"), "include", "node_modules", "@rbxts", "fastsignal", "out")
+    TS.import(script, game:GetService("ReplicatedStorage"), "include", "node_modules", "@rbxts", "fastsignal", "out")
 
 --> Types
 
@@ -518,8 +518,8 @@ function Keep:_save(newestData: KeepStruct, release: boolean) -- used to interna
 
 	local transformedData = transformUpdate(self, newestData, release)
 
-	if self._keep_store then
-		local compressedData = self._keep_store._compression(DeepCopy(transformedData.Data))
+	if self._keep_store and self._keep_store._preSave then
+		local compressedData = self._keep_store._preSave(DeepCopy(transformedData.Data))
 
 		transformedData.Data = compressedData
 	end

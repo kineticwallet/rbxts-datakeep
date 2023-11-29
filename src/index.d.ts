@@ -1,6 +1,5 @@
 import Keep from "./Keep";
 import MockStore from "./MockStore";
-import { Wrapper } from "./Wrapper";
 
 declare type StoreInfo = {
 	Name: string;
@@ -37,10 +36,8 @@ declare type Store<D> = {
 	Mock: MockStore;
 	LoadKeep: (key: string, unReleasedHandler?: UnReleasedHandler) => Promise<Keep<D>>;
 	ViewKeep: (key: string, version?: string) => Promise<Keep<D> | undefined>;
-	AttachToSave: (
-		compression: Record<string, ExtractMembers<D, D>>,
-		decompression: Record<string, ExtractMembers<D, D>>,
-	) => void;
+	PreLoad: (callback: (data: D) => D | unknown) => void;
+	PreSave: (callback: (data: D) => D | unknown) => void;
 	PostGlobalUpdate: (key: string, updateHandler: (globalUpdates: GlobalUpdates) => unknown) => Promise<void>;
 };
 

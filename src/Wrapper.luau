@@ -1,4 +1,8 @@
-local Signal = require(script.Parent.Parent.Signal)
+--!nonstrict
+
+local TS = _G[script]
+local Signal =
+    TS.import(script, game:GetService("ReplicatedStorage"), "include", "node_modules", "@rbxts", "fastsignal", "out")
 
 local function getOrCreateListener(self, dataPath)
 	if not self._listeners then
