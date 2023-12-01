@@ -1,8 +1,8 @@
 --!nonstrict
 
 local TS = _G[script]
-local Signal =
-    TS.import(script, game:GetService("ReplicatedStorage"), "include", "node_modules", "@rbxts", "fastsignal", "out")
+Signal =
+	TS.import(script, game:GetService("ReplicatedStorage"), "include", "node_modules", "@rbxts", "fastsignal", "out")
 
 local function getOrCreateListener(self, dataPath)
 	if not self._listeners then
@@ -33,6 +33,22 @@ return {
 
 	Mutate = function(self, dataPath: string, processor)
 		local dataToFindSplit = string.split(dataPath, ".")
+
+		if #dataToFindSplit == 1 then
+			self.Data[dataPath] = processor(self.Data[dataPath])
+
+			local listeners = self._listeners
+
+			if listeners then
+				local signal = listeners[dataPath]
+
+				if signal then
+					signal:Fire(self.Data[dataPath])
+				end
+			end
+
+			return
+		end
 
 		local currentData = self.Data
 
