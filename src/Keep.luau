@@ -21,7 +21,15 @@ Keep.__index = Keep
 local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local Promise =
 	TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "Promise")
-local Signal = TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fastsignal", "out")
+local Signal = TS.import(
+	script,
+	game:GetService("ReplicatedStorage"),
+	"rbxts_include",
+	"node_modules",
+	"@rbxts",
+	"fastsignal",
+	"out"
+)
 --> Types
 
 export type KeepStruct = {

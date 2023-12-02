@@ -1,7 +1,15 @@
 --!nonstrict
 
-local TS = _G[script]
-TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fastsignal", "out")
+local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
+local Signal = TS.import(
+	script,
+	game:GetService("ReplicatedStorage"),
+	"rbxts_include",
+	"node_modules",
+	"@rbxts",
+	"fastsignal",
+	"out"
+)
 
 local function getOrCreateListener(self, dataPath)
 	if not self._listeners then
