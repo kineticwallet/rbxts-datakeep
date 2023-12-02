@@ -46,19 +46,19 @@ declare interface Keep<D> extends KeepStruct<D> {
 	OnGlobalUpdate: FastSignal<unknown>;
 	GlobalStateProcessor: (updateData: GlobalUpdate, lock: () => boolean, remove: () => boolean) => void;
 	OnRelease: FastSignal<void>;
-	Save: () => KeepStruct<D>;
-	IsActive: () => boolean;
-	Identify: () => boolean;
-	GetKeyInfo: () => DataStoreKeyInfo;
-	Release: () => Promise<Keep<D>>;
-	Reconcile: () => void;
-	AddUserId: (userId: number) => void | undefined;
-	RemoveUserId: (userId: number) => void;
-	GetVersions: (minDate?: number, maxDate?: number) => Promise<Iterator>;
-	SetVersion: (version: string, migrateProcessor?: (versionKeep: Keep<D>) => Keep<D>) => Promise<Keep<D>>;
-	GetActiveGlobalUpdates: () => GlobalUpdate[];
-	GetLockedGlobalUpdates: () => GlobalUpdate[];
-	ClearLockedUpdate: (id: number) => Promise<void>;
+	Save(): KeepStruct<D>;
+	IsActive(): boolean;
+	Identify(): boolean;
+	GetKeyInfo(): DataStoreKeyInfo;
+	Release(): Promise<Keep<D>>;
+	Reconcile(): void;
+	AddUserId(userId: number): void | undefined;
+	RemoveUserId(userId: number): void;
+	GetVersions(minDate?: number, maxDate?: number): Promise<Iterator>;
+	SetVersion(version: string, migrateProcessor?: (versionKeep: Keep<D>) => Keep<D>): Promise<Keep<D>>;
+	GetActiveGlobalUpdates(): GlobalUpdate[];
+	GetLockedGlobalUpdates(): GlobalUpdate[];
+	ClearLockedUpdate(id: number): Promise<void>;
 }
 
 declare const Keep: Keep<unknown>;

@@ -34,16 +34,16 @@ declare interface GlobalUpdates {
 
 declare type Store<D> = {
 	Mock: MockStore;
-	LoadKeep: (key: string, unReleasedHandler?: UnReleasedHandler) => Promise<Keep<D>>;
-	ViewKeep: (key: string, version?: string) => Promise<Keep<D> | undefined>;
-	PreLoad: (callback: (data: D) => D | unknown) => void;
-	PreSave: (callback: (data: D) => D | unknown) => void;
-	Validate(data: D): boolean | LuaTuple<[boolean, string]>;
-	PostGlobalUpdate: (key: string, updateHandler: (globalUpdates: GlobalUpdates) => unknown) => Promise<void>;
+	LoadKeep(key: string, unReleasedHandler?: UnReleasedHandler): Promise<Keep<D>>;
+	ViewKeep(key: string, version?: string): Promise<Keep<D> | undefined>;
+	PreLoad(callback: (data: D) => D | unknown): void;
+	PreSave(callback: (data: D) => D | unknown): void;
+	Validate: (data: D) => boolean | LuaTuple<[boolean, string]>;
+	PostGlobalUpdate(key: string, updateHandler: (globalUpdates: GlobalUpdates) => unknown): Promise<void>;
 };
 
 declare interface DataKeep {
-	GetStore<D extends object>(storeInfo: StoreInfo | string, dataTemplate: D): Promise<Store<D>>;
+	GetStore: <D extends object>(storeInfo: StoreInfo | string, dataTemplate: D) => Promise<Store<D>>;
 }
 
 declare const DataKeep: DataKeep;
