@@ -9,15 +9,8 @@ local RunService = game:GetService("RunService")
 --> Includes
 
 local TS = _G[script]
-local Promise = TS.import(
-	script,
-	game:GetService("ReplicatedStorage"),
-	"rbxts_include",
-	"node_modules",
-	"@rbxts",
-	"promise-forward",
-	"src"
-)
+local Promise =
+	TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "Promise", "src")
 TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fastsignal", "out")
 
 local MockStore = require(script.MockStore)
