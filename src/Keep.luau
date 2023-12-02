@@ -22,15 +22,13 @@ local TS = _G[script]
 local Promise = TS.import(
 	script,
 	game:GetService("ReplicatedStorage"),
-	"include",
+	"rbxts_include",
 	"node_modules",
 	"@rbxts",
 	"promise-forward",
 	"src"
 )
-local Signal =
-	TS.import(script, game:GetService("ReplicatedStorage"), "include", "node_modules", "@rbxts", "fastsignal", "out")
-
+TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fastsignal", "out")
 --> Types
 
 export type KeepStruct = {
