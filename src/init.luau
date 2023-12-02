@@ -8,7 +8,7 @@ local RunService = game:GetService("RunService")
 
 --> Includes
 
-local TS = _G[script]
+local TS = require(game:GetService("ReplicatedStorage"):WaitForChild("rbxts_include"):WaitForChild("RuntimeLib"))
 local Promise =
 	TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "Promise")
 TS.import(script, game:GetService("ReplicatedStorage"), "rbxts_include", "node_modules", "@rbxts", "fastsignal", "out")
